@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lyl-music - 关于</title>
+
+    <link rel="stylesheet" href="./statics/animate.min.css" />
+    <link href="./statics/bootstrap.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --color-background: #ffffff;
+        --color-text: #1d1d1f;
+        --color-secondary-text: #6e6e73;
+        --color-blue: #007aff;
+        --color-border: #d2d2d7;
+        --color-card-background: #f5f5f7;
+        --transition-duration: 0.3s;
+        --transition-timing-function: ease-in-out;
+      }
+
+      html.dark-mode {
+        --color-background: #1c1c1e;
+        --color-text: #f5f5f7;
+        --color-secondary-text: #a8a8ad;
+        --color-blue: #0a84ff;
+        --color-border: #3a3a3c;
+        --color-card-background: #2c2c2e;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
+        background-color: var(--color-background);
+        color: var(--color-text);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color var(--transition-duration),
+          color var(--transition-duration);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-weight: 600;
+        color: var(--color-text);
+        transition: color var(--transition-duration);
+      }
+
+      p {
+        transition: color var(--transition-duration);
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid var(--color-border);
+        margin: 60px auto;
+        width: 80%;
+        max-width: 600px;
+        transition: border-color var(--transition-duration);
+      }
+
+      .scroll-reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s var(--transition-timing-function),
+          transform 0.8s var(--transition-timing-function);
+        will-change: opacity, transform;
+      }
+
+      .scroll-reveal.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .apple-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 0;
+        z-index: 1000;
+        backdrop-filter: saturate(180%) blur(20px);
+        background-color: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid var(--color-border);
+        transition: background-color var(--transition-duration),
+          border-color var(--transition-duration);
+      }
+      html.dark-mode .apple-header {
+        background-color: rgba(28, 28, 30, 0.8);
+      }
+
+      .apple-header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .apple-header .logo {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--color-text);
+        text-decoration: none;
+        transition: color var(--transition-duration);
+      }
+
+      .apple-header nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .apple-header nav a {
+        color: var(--color-secondary-text);
+        text-decoration: none;
+        font-size: 16px;
+        padding: 5px 0;
+        transition: color var(--transition-duration);
+      }
+
+      .apple-header nav a:hover {
+        color: var(--color-text);
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-secondary-text);
+        font-size: 18px;
+        padding: 5px;
+        transition: color var(--transition-duration), transform 0.1s;
+      }
+
+      .theme-toggle:hover {
+        color: var(--color-text);
+        transform: scale(1.1);
+      }
+      .theme-toggle:active {
+        transform: scale(0.95);
+      }
+
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--color-text);
+        font-size: 24px;
+        cursor: pointer;
+        transition: color var(--transition-duration), transform 0.1s;
+      }
+
+      .menu-toggle:hover {
+        transform: scale(1.1);
+      }
+      .menu-toggle:active {
+        transform: scale(0.95);
+      }
+
+      .hero {
+        padding-top: 150px;
+        padding-bottom: 100px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+
+      .hero p {
+        font-size: 20px;
+        color: var(--color-secondary-text);
+        margin-bottom: 40px;
+      }
+
+      .info-card {
+        background-color: var(--color-card-background);
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out,
+          background-color var(--transition-duration);
+      }
+
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      }
+
+      .info-card h3 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .info-card p {
+        font-size: 16px;
+        color: var(--color-secondary-text);
+      }
+
+      footer {
+        padding: 30px 0;
+        text-align: center;
+        border-top: 1px solid var(--color-border);
+        color: var(--color-secondary-text);
+        font-size: 14px;
+        background-color: var(--color-background);
+        transition: background-color var(--transition-duration),
+          border-color var(--transition-duration),
+          color var(--transition-duration);
+      }
+
+      @media (max-width: 768px) {
+        .apple-header nav {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 60px;
+          left: 0;
+          width: 100%;
+          background-color: var(--color-background);
+          padding: 15px 0;
+          border-top: 1px solid var(--color-border);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          z-index: 999;
+          transform: translateY(-100%);
+          opacity: 0;
+          transition: transform 0.4s ease-out, opacity 0.4s ease-out,
+            background-color var(--transition-duration),
+            border-color var(--transition-duration);
+        }
+
+        .apple-header nav.show {
+          display: flex;
+          transform: translateY(0);
+          opacity: 1;
+        }
+
+        .apple-header nav a,
+        .apple-header nav button {
+          padding: 10px 20px;
+          width: 100%;
+          text-align: center;
+          border-bottom: 1px solid var(--color-border);
+        }
+
+        .apple-header nav button:last-of-type {
+          border-bottom: none;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="apple-header">
+      <div class="container">
+        <a href="index.html" class="logo">lyl-music</a>
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+        <nav>
+          <a href="index.html">首页</a>
+          <a href="contact.html">联系我们</a>
+          <button id="theme-toggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero scroll-reveal">
+      <div class="container">
+        <h1 class="animate__animated animate__fadeInUp">关于 lyl-music</h1>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">
+          简约与纯粹的音乐体验，专注本地播放与歌词同步。
+        </p>
+      </div>
+    </section>
+
+    <section class="container scroll-reveal">
+      <div class="info-card animate__animated animate__fadeInUp">
+        <h3>版本信息</h3>
+        <p>版本: 1.0.0</p>
+        <p>开发者: nnjxka</p>
+      </div>
+
+      <div
+        class="info-card animate__animated animate__fadeInUp animate__delay-1s"
+      >
+        <h3>应用特点</h3>
+        <ul>
+          <li>极简界面，专注音乐本身</li>
+          <li>精准歌词同步</li>
+          <li>本地播放高效流畅</li>
+          <li>暗/亮模式自由切换</li>
+        </ul>
+      </div>
+
+      <div
+        class="info-card animate__animated animate__fadeInUp animate__delay-2s"
+      >
+        <h3>联系方式</h3>
+        <p>邮箱: support@lyl-music.com</p>
+        <p>
+          官网:
+          <a href="https://lyl-music.com" target="_blank">lyl-music.com</a>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <p>Copyright © 2025 lyl-music</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      const revealElements = document.querySelectorAll(".scroll-reveal");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      revealElements.forEach((el) => observer.observe(el));
+
+      $(document).ready(function () {
+        const menuToggle = document.querySelector(".menu-toggle");
+        const nav = document.querySelector(".apple-header nav");
+
+        menuToggle.addEventListener("click", () => {
+          nav.classList.toggle("show");
+        });
+
+        const themeToggle = $("#theme-toggle");
+        const html = $("html");
+        const userPrefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        );
+
+        function getTheme() {
+          const stored = localStorage.getItem("theme");
+          return stored ? stored : userPrefersDark.matches ? "dark" : "light";
+        }
+
+        function applyTheme(theme) {
+          if (theme === "dark") {
+            html.addClass("dark-mode");
+            themeToggle.find("i").removeClass("fa-moon").addClass("fa-sun");
+          } else {
+            html.removeClass("dark-mode");
+            themeToggle.find("i").removeClass("fa-sun").addClass("fa-moon");
+          }
+          localStorage.setItem("theme", theme);
+        }
+
+        applyTheme(getTheme());
+
+        themeToggle.on("click", () => {
+          const newTheme = html.hasClass("dark-mode") ? "light" : "dark";
+          applyTheme(newTheme);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lyl-music - 简约与纯粹的音乐体验</title>
+
+    <link rel="stylesheet" href="./statics/animate.min.css" />
+    <link href="./statics/bootstrap.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      /* ==================================== */
+      /* 1. 核心 Apple 样式 & 字体 & 动画基础 */
+      /* ==================================== */
+      :root {
+        /* 浅色模式颜色变量 */
+        --color-background: #ffffff; /* 纯白背景 */
+        --color-text: #1d1d1f; /* 深空灰色文本 */
+        --color-secondary-text: #6e6e73; /* 浅灰色次要文本 */
+        --color-blue: #007aff; /* Apple 蓝色 */
+        --color-link: #0066cc;
+        --color-border: #d2d2d7; /* 浅灰色边框 */
+        --color-card-background: #f5f5f7; /* 卡片背景 (轻微离屏) */
+
+        /* 统一的过渡时间 */
+        --transition-duration: 0.3s;
+        --transition-timing-function: ease-in-out;
+      }
+
+      /* 暗色模式覆盖 */
+      html.dark-mode {
+        --color-background: #1c1c1e; /* 深灰色背景 */
+        --color-text: #f5f5f7; /* 浅色文本 */
+        --color-secondary-text: #a8a8ad; /* 略亮的灰色次要文本 */
+        --color-blue: #0a84ff; /* 略亮的 Apple 蓝色 */
+        --color-link: #499eff;
+        --color-border: #3a3a3c; /* 深色边框 */
+        --color-card-background: #2c2c2e; /* 暗模式卡片背景 */
+      }
+
+      /* SF Pro 字体模拟 (Apple 设备会使用原生字体) */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
+        background-color: var(--color-background);
+        color: var(--color-text);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color var(--transition-duration),
+          color var(--transition-duration); /* 平滑切换主题 */
+        -webkit-font-smoothing: antialiased; /* Apple Style Font Smoothing */
+        -moz-osx-font-smoothing: grayscale; /* Apple Style Font Smoothing */
+      }
+
+      .container {
+        max-width: 1080px; /* 适中的内容宽度 */
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-weight: 600; /* SemiBold */
+        color: var(--color-text);
+        transition: color var(--transition-duration);
+      }
+
+      p {
+        transition: color var(--transition-duration);
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid var(--color-border);
+        margin: 60px auto;
+        width: 80%;
+        max-width: 600px;
+        transition: border-color var(--transition-duration);
+      }
+
+      /* 滚动视差动画类 (增强效果) */
+      .scroll-reveal {
+        opacity: 0;
+        transform: translateY(20px); /* 初始位置略低于最终位置 */
+        transition: opacity 0.8s var(--transition-timing-function),
+          transform 0.8s var(--transition-timing-function);
+        will-change: opacity, transform; /* 浏览器优化性能 */
+      }
+
+      .scroll-reveal.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ==================================== */
+      /* 2. 头部导航 (Header) */
+      /* ==================================== */
+      .apple-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 0;
+        z-index: 1000;
+        backdrop-filter: saturate(180%) blur(20px);
+        background-color: rgba(255, 255, 255, 0.8); /* 浅色模式毛玻璃 */
+        border-bottom: 1px solid var(--color-border);
+        transition: background-color var(--transition-duration),
+          border-color var(--transition-duration);
+      }
+      html.dark-mode .apple-header {
+        background-color: rgba(28, 28, 30, 0.8); /* 暗色模式毛玻璃 */
+      }
+
+      .apple-header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .apple-header .logo {
+        font-size: 20px;
+        font-weight: 700; /* Bold */
+        color: var(--color-text);
+        text-decoration: none;
+        transition: color var(--transition-duration);
+      }
+
+      .apple-header nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .apple-header nav a {
+        color: var(--color-secondary-text);
+        text-decoration: none;
+        font-size: 16px;
+        padding: 5px 0;
+        position: relative; /* 用于激活下划线 */
+        transition: color var(--transition-duration);
+      }
+
+      .apple-header nav a:hover {
+        color: var(--color-text);
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-secondary-text);
+        font-size: 18px;
+        padding: 5px; /* 增加点击区域 */
+        transition: color var(--transition-duration), transform 0.1s;
+      }
+
+      .theme-toggle:hover {
+        color: var(--color-text);
+        transform: scale(1.1); /* 悬停轻微放大 */
+      }
+      .theme-toggle:active {
+        transform: scale(0.95); /* 点击轻微收缩 */
+      }
+
+      .menu-toggle {
+        display: none; /* 默认隐藏，只在移动端显示 */
+        background: none;
+        border: none;
+        color: var(--color-text);
+        font-size: 24px;
+        cursor: pointer;
+        transition: color var(--transition-duration), transform 0.1s;
+      }
+      .menu-toggle:hover {
+        transform: scale(1.1);
+      }
+      .menu-toggle:active {
+        transform: scale(0.95);
+      }
+
+      /* ==================================== */
+      /* 3. 英雄区域 (Hero) */
+      /* ==================================== */
+      .hero {
+        padding-top: 150px; /* 留出头部空间 */
+        padding-bottom: 100px;
+        text-align: center;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--color-background); /* 确保背景色随主题变化 */
+      }
+
+      .hero-content {
+        max-width: 800px;
+        padding: 0 20px;
+      }
+
+      .hero h1 {
+        font-size: 56px;
+        line-height: 1.1;
+        margin-bottom: 20px;
+        font-weight: 700; /* Bold */
+      }
+
+      .hero p {
+        font-size: 24px;
+        color: var(--color-secondary-text);
+        margin-bottom: 40px;
+        font-weight: 400; /* Regular */
+      }
+
+      .cta-button {
+        display: inline-block;
+        background-color: var(--color-blue);
+        color: #ffffff; /* 确保按钮内文字是浅色，不受主题影响 */
+        padding: 12px 30px;
+        text-decoration: none;
+        border-radius: 999px; /* 药丸形状按钮 */
+        font-size: 18px;
+        font-weight: 500;
+        transition: background-color var(--transition-duration), transform 0.15s,
+          box-shadow var(--transition-duration);
+        box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2); /* 按钮阴影 */
+      }
+
+      .cta-button:hover {
+        background-color: var(--color-link); /* 悬停时略微变化的蓝色 */
+        transform: translateY(-3px); /* 向上轻微浮动 */
+        box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3); /* 阴影增强 */
+      }
+      .cta-button:active {
+        transform: translateY(0); /* 点击时恢复原位 */
+        box-shadow: 0 2px 10px rgba(0, 122, 255, 0.1); /* 阴影减弱 */
+      }
+
+      /* ==================================== */
+      /* 4. 模块展示区域 (Showcase) */
+      /* ==================================== */
+      .modules-showcase {
+        padding: 80px 0;
+        background-color: var(--color-card-background); /* 略微不同的背景色 */
+        transition: background-color var(--transition-duration);
+      }
+
+      .section-title {
+        font-size: 40px;
+        text-align: center;
+        margin-bottom: 60px;
+        font-weight: 700;
+      }
+
+      .module-section {
+        margin-bottom: 80px;
+        text-align: center;
+      }
+
+      .module-section h3 {
+        font-size: 32px;
+        margin-top: 0;
+        margin-bottom: 15px;
+      }
+
+      .module-section p {
+        font-size: 20px;
+        max-width: 700px;
+        margin: 0 auto 30px auto;
+        color: var(--color-secondary-text);
+      }
+
+      .screenshot-container {
+        width: 100%;
+        padding: 20px;
+        border-radius: 20px;
+        background-color: var(--color-background);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* 柔和阴影 */
+        transition: background-color var(--transition-duration),
+          box-shadow var(--transition-duration);
+      }
+      html.dark-mode .screenshot-container {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); /* 暗色模式下阴影更明显 */
+      }
+
+      .app-screenshot {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 10px;
+      }
+
+      /* ==================================== */
+      /* 5. 核心亮点 (Features) */
+      /* ==================================== */
+      .features {
+        padding: 80px 0;
+        text-align: center;
+        background-color: var(--color-background); /* 确保背景色随主题变化 */
+      }
+
+      .feature-card {
+        background-color: var(--color-card-background);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        height: 100%; /* 确保高度一致 */
+        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out,
+          background-color var(--transition-duration);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-8px); /* 向上浮动更多 */
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* 阴影增强 */
+      }
+
+      .feature-card .icon {
+        font-size: 40px;
+        margin-bottom: 15px;
+        /* 尝试用 emoji 颜色，或者自定义颜色 */
+        color: var(--color-blue); /* 特征图标也使用 Apple 蓝色 */
+        transition: color var(--transition-duration);
+      }
+
+      .feature-card h3 {
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .feature-card p {
+        color: var(--color-secondary-text);
+        font-size: 16px;
+      }
+
+      /* ==================================== */
+      /* 6. 底部 (Footer) */
+      /* ==================================== */
+      footer {
+        padding: 30px 0;
+        text-align: center;
+        border-top: 1px solid var(--color-border);
+        color: var(--color-secondary-text);
+        font-size: 14px;
+        background-color: var(--color-background);
+        transition: background-color var(--transition-duration),
+          border-color var(--transition-duration),
+          color var(--transition-duration);
+      }
+
+      /* ==================================== */
+      /* 7. 响应式布局 (Mobile) */
+      /* ==================================== */
+      @media (max-width: 768px) {
+        .apple-header nav {
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 60px; /* 菜单出现在 header 下方 */
+          left: 0;
+          width: 100%;
+          background-color: var(--color-background);
+          padding: 15px 0;
+          border-top: 1px solid var(--color-border);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          z-index: 999;
+          /* 增加过渡，让菜单弹出更平滑 */
+          transform: translateY(-100%);
+          opacity: 0;
+          transition: transform 0.4s ease-out, opacity 0.4s ease-out,
+            background-color var(--transition-duration),
+            border-color var(--transition-duration);
+        }
+
+        .apple-header nav.show {
+          display: flex;
+          transform: translateY(0);
+          opacity: 1;
+        }
+
+        .apple-header nav a,
+        .apple-header nav button {
+          padding: 10px 20px;
+          width: 100%;
+          text-align: center;
+          border-bottom: 1px solid var(--color-border); /* 菜单项之间加细线 */
+        }
+
+        .apple-header nav button:last-of-type {
+          border-bottom: none;
+        }
+
+        .menu-toggle {
+          display: block; /* 在小屏幕上显示菜单按钮 */
+        }
+
+        .hero h1 {
+          font-size: 38px;
+        }
+
+        .hero p {
+          font-size: 18px;
+        }
+
+        .section-title {
+          font-size: 32px;
+        }
+
+        .module-section h3 {
+          font-size: 26px;
+        }
+
+        .module-section p {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="apple-header">
+      <div class="container">
+        <a href="#hero" class="logo">lyl-music</a>
+
+        <button class="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <nav>
+          <a href="#hero">首页</a>
+          <a href="#contact">联系我们</a>
+          <button id="theme-toggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero" id="hero">
+      <div class="hero-content scroll-reveal">
+        <h1 class="animate__animated animate__fadeInUp">
+          尽享音乐，自在聆听。
+        </h1>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">
+          lyl-music 用极简哲学打造专注的本地音乐体验。
+        </p>
+        <a
+          href="#modules-showcase"
+          class="cta-button animate__animated animate__fadeInUp animate__delay-2s"
+          >免费下载</a
+        >
+      </div>
+    </section>
+
+    <section class="modules-showcase" id="modules-showcase">
+      <div class="container">
+        <h2
+          class="section-title scroll-reveal animate__animated animate__fadeInUp"
+        >
+          简洁，却强大。
+        </h2>
+        <hr />
+
+        <div class="module-section scroll-reveal">
+          <h3 class="animate__animated animate__fadeInUp">
+            探索你的音乐世界。
+          </h3>
+          <p class="animate__animated animate__fadeInUp animate__delay-1s">
+            首页以沉稳留白展现重点内容，让音乐成为唯一的主角。
+          </p>
+          <div
+            class="screenshot-container animate__animated animate__fadeInUp animate__delay-2s"
+          >
+            <img
+              src="https://picsum.photos/seed/music-home/1600/900"
+              class="app-screenshot"
+            />
+          </div>
+        </div>
+        <hr />
+
+        <div class="module-section scroll-reveal">
+          <h3 class="animate__animated animate__fadeInUp">
+            精心编排，悦享节奏。
+          </h3>
+          <p class="animate__animated animate__fadeInUp animate__delay-1s">
+            你的播放列表，简洁而清晰，随时切换心情。
+          </p>
+          <div
+            class="screenshot-container animate__animated animate__fadeInUp animate__delay-2s"
+          >
+            <img
+              src="https://picsum.photos/seed/music-playlist/1600/900"
+              class="app-screenshot"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="container">
+        <h2
+          class="section-title scroll-reveal animate__animated animate__fadeInUp"
+        >
+          核心亮点
+        </h2>
+        <hr />
+        <div class="row justify-content-center">
+          <div class="col-md-4 mb-4 scroll-reveal">
+            <div class="feature-card animate__animated animate__fadeInUp">
+              <div class="icon">🎵</div>
+              <h3>清爽界面</h3>
+              <p>极简视觉，直达重点。</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4 scroll-reveal">
+            <div
+              class="feature-card animate__animated animate__fadeInUp animate__delay-1s"
+            >
+              <div class="icon">🎶</div>
+              <h3>精准歌词</h3>
+              <p>流畅同步，沉浸氛围。</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4 scroll-reveal">
+            <div
+              class="feature-card animate__animated animate__fadeInUp animate__delay-2s"
+            >
+              <div class="icon">🚀</div>
+              <h3>轻量高效</h3>
+              <p>启动迅速，运行如丝滑。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Copyright © 2025 lyl-music</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+      // Scroll reveal observer
+      const revealElements = document.querySelectorAll(".scroll-reveal");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+            } else {
+              // 可选：如果元素滚出视口则移除 show 类，实现重复动画
+              // entry.target.classList.remove("show");
+            }
+          });
+        },
+        { threshold: 0.15 } // 当元素 15% 进入视口时触发
+      );
+
+      revealElements.forEach((el) => observer.observe(el));
+
+      // Theme toggle
+      $(document).ready(function () {
+        // 移动端菜单切换
+        const menuToggle = document.querySelector(".menu-toggle");
+        const nav = document.querySelector(".apple-header nav");
+
+        menuToggle.addEventListener("click", () => {
+          nav.classList.toggle("show");
+        });
+
+        const themeToggle = $("#theme-toggle");
+        const html = $("html");
+        const userPrefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        );
+
+        function getTheme() {
+          const stored = localStorage.getItem("theme");
+          return stored ? stored : userPrefersDark.matches ? "dark" : "light";
+        }
+
+        function applyTheme(theme) {
+          if (theme === "dark") {
+            html.addClass("dark-mode");
+            themeToggle.find("i").removeClass("fa-moon").addClass("fa-sun");
+          } else {
+            html.removeClass("dark-mode");
+            themeToggle.find("i").removeClass("fa-sun").addClass("fa-moon");
+          }
+          localStorage.setItem("theme", theme);
+        }
+
+        // 初始化主题
+        applyTheme(getTheme());
+
+        // 切换主题事件
+        themeToggle.on("click", () => {
+          const newTheme = html.hasClass("dark-mode") ? "light" : "dark";
+          applyTheme(newTheme);
+        });
+      });
+    </script>
+  </body>
+</html>
