@@ -1,0 +1,64 @@
+/* 关于页特有样式 */
+.about-hero {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 20px 60px;
+}
+.about-hero h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.about-hero p {
+  font-size: 20px;
+  color: var(--color-secondary-text);
+  max-width: 700px;
+  margin: 10px auto 20px auto;
+}
+
+.about-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 60px 20px;
+}
+.about-card {
+  background-color: var(--color-card-background);
+  border-radius: 15px;
+  padding: 30px;
+  width: 300px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out,
+    background-color var(--transition-duration);
+  text-align: center;
+}
+.about-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+.about-card .icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+  color: var(--color-blue);
+}
+.about-card h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.about-card p {
+  color: var(--color-secondary-text);
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .about-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}
